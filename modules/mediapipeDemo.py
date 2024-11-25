@@ -62,6 +62,7 @@ class HandTracker:
             
         return self.current_direction
 
+    # Used ChatGPT to help write this function as I needed a way to close all windows 
     def cleanup(self):
         try:
             self.hands.close()
