@@ -17,13 +17,15 @@ class PacMan:
         self.nextDirection = direction
         self.blinkCount = 0
         self.blinkTimer = 0
-        self.maxBlinks = 3
+        self.maxBlinks = 6
         self.blinkDuration = 10
         self.deathAnimationComplete = False
         self.poweredUp = False
+        self.poweredUpDuration = 0
 
 
     # For loading screen pacmans
+    # I used CSAcademy's Pacman section to help with the mouth staying within its bounds.
     def update(self):
         
         if self.closing:
@@ -52,16 +54,24 @@ class PacMan:
     def collectPellet(self, row, col):
         if app.maze.grid[row][col] == 2:
             self.score += 10
+            app.chompSound.play()
             app.maze.grid[row][col] = 0
     
     def collectPowerPellet(self, row, col):
         if app.maze.grid[row][col] == 3:
+            app.blinky.frightened = True
+            app.clyde.frightened = True
+            app.pinky.frightened = True
             self.poweredUp = True
             app.maze.grid[row][col] = 0
 
     def update1(self):
         if self.still == False:
-
+            if self.poweredUp:
+                self.poweredUpDuration += 1
+                if self.poweredUpDuration >= 150:
+                    self.poweredUp = False
+                    self.poweredUpDuration = 0
             if self.closing:
                 self.mouthAngle -= 10
                 if self.mouthAngle == 0:
@@ -129,11 +139,17 @@ class PacMan:
                 self.collectPellet(row, col)
                 self.collectPowerPellet(row, col)
                 if self.poweredUp:
-                    app.blinky.frightened = True
                     app.blinky.color = 'blue'
-                    if distance(self.x, self.y, app.blinky.x, app.blinky.y) < (self.radius + app.blinky.radius)/2:
-                        app.blinky.x = 220
-                        app.blinky.y = 220
+                    app.clyde.color = 'blue'
+                    app.pinky.color = 'blue'
+                    
+                else:
+                    app.blinky.frightened = False
+                    app.clyde.frightened = False
+                    app.pinky.frightened = False
+                    app.clyde.color = 'orange'
+                    app.blinky.color = 'red'
+                    app.pinky.color = 'pink'
             else:
                 self.still = True
 
@@ -204,6 +220,6 @@ class PacMan:
             if self.blinkTimer >= self.blinkDuration:
                 self.blinkTimer = 0
                 self.blinkCount += 1
-                if self.blinkCount >= self.maxBlinks * 2:
+                if self.blinkCount >= self.maxBlinks:
                     self.deathAnimationComplete = True
 
