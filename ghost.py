@@ -345,12 +345,12 @@ class Inky(Ghost):
 
         if targetRow < 0:
             targetRow = 0
-        elif targetRow > app.maze.numRows - 1:
-            targetRow = app.maze.numRows - 1
+        elif targetRow > len(app.maze.grid) - 1:
+            targetRow = len(app.maze.grid) - 1
         if targetCol < 0:
             targetCol = 0
-        elif targetCol > app.maze.numCols - 1:
-            targetCol = app.maze.numCols - 1
+        elif targetCol > len(app.maze.grid[0]) - 1:
+            targetCol = len(app.maze.grid[0]) - 1
 
         possible_moves = {
             'up': (self.x, self.y - self.check),

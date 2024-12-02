@@ -142,6 +142,7 @@ class PacMan:
                     app.blinky.color = 'blue'
                     app.clyde.color = 'blue'
                     app.pinky.color = 'blue'
+                    app.inky.color = 'blue'
                     
                 else:
                     app.blinky.frightened = False
@@ -150,6 +151,7 @@ class PacMan:
                     app.clyde.color = 'orange'
                     app.blinky.color = 'red'
                     app.pinky.color = 'pink'
+                    app.inky.color = 'cyan'
             else:
                 self.still = True
 

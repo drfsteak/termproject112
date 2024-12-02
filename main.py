@@ -23,10 +23,10 @@ def startGhosts(app):
     y += app.maze.cellSize / 2
     app.ghostStill = True
     app.counter = 0
-    app.blinkyLeave = 0
     app.pinkyLeave = 30
     app.clydeLeave = 60
-    app.blinky = Blinky(x-15, y, 14)
+    app.inkyLeave = 90
+    app.blinky = Blinky(x-15, y - 3*app.maze.cellSize, 14)
     app.clyde = Clyde(x+15, y, 14)
     app.pinky = Pinky(x+50, y, 14)
     app.inky = Inky(x-15, y, 14)
@@ -39,7 +39,19 @@ def sandBoxComponents(app):
 
     app.drawPellet = False
     app.drawPowerPellet = False
-    
+
+def soundComponents(app):
+    app.chompSound = Sound('https://eta.vgmtreasurechest.com/soundtracks/pac-man-game-sound-effects/knwtmadt/Chomp.mp3')
+    app.sound = Sound('https://eta.vgmtreasurechest.com/soundtracks/pac-man-game-sound-effects/gmiffyvl/Intro.mp3')  # https://www.myinstants.com/en/instant/pacman-death-44465/
+    app.deathSound = Sound('file:///Users/davidli/termproject112/sounds/pacman-die.mp3')  # https://www.myinstants.com/en/instant/pacman-death-44465/
+    app.poweredUpSound = Sound('file:///Users/davidli/termproject112/sounds/pac-man-power-pellet.mp3') # https://www.myinstants.com/en/instant/pac-man-power-pellet-66997/
+    app.eatingGhostSound = Sound('https://eta.vgmtreasurechest.com/soundtracks/pac-man-game-sound-effects/zaehkcsz/Ghost.mp3') # https://classicgaming.cc/classics/pac-man/sounds
+
+def imageComponents(app):
+    app.gameOverImage = '/Users/davidli/termproject112/images/download.jpeg' # https://www.pond5.com/stock-footage/item/45769390-game-over-spin-down-arcade-end-game-screen-color-motion-grap
+    app.InstructionsImage = '/Users/davidli/termproject112/images/text-1733076606719-removebg-preview.jpg' # Public Pixel Font by GGBotNet
+    app.instructionsButton = '/Users/davidli/termproject112/images/images-removebg-preview.jpg' # https://www.kindpng.com/imgv/immwwoR_instructions-button-png-transparent-png/
+    app.restartImage = '/Users/davidli/termproject112/images/text-1733102813925-removebg-preview.jpg' # Public Pixel Font by GGBotNet           
 
 def onAppStart(app):
     
@@ -59,14 +71,8 @@ def onAppStart(app):
     app.instructions = False
 
     app.gameOver = False
-    app.chompSound = Sound('https://eta.vgmtreasurechest.com/soundtracks/pac-man-game-sound-effects/knwtmadt/Chomp.mp3')
-    app.sound = Sound('https://eta.vgmtreasurechest.com/soundtracks/pac-man-game-sound-effects/gmiffyvl/Intro.mp3')  # https://www.myinstants.com/en/instant/pacman-death-44465/
-    app.deathSound = Sound('file:///Users/davidli/termproject112/sounds/pacman-die.mp3')  # https://www.myinstants.com/en/instant/pacman-death-44465/
-    app.poweredUpSound = Sound('file:///Users/davidli/termproject112/sounds/pac-man-power-pellet.mp3') # https://www.myinstants.com/en/instant/pac-man-power-pellet-66997/
-    app.eatingGhostSound = Sound('https://eta.vgmtreasurechest.com/soundtracks/pac-man-game-sound-effects/zaehkcsz/Ghost.mp3')
-    app.gameOverImage = '/Users/davidli/termproject112/images/download.jpeg' # https://www.pond5.com/stock-footage/item/45769390-game-over-spin-down-arcade-end-game-screen-color-motion-grap
-    app.InstructionsImage = '/Users/davidli/termproject112/images/text-1733076606719-removebg-preview.jpg' # Public Pixel Font by GGBotNet
-    app.instructionsButton = '/Users/davidli/termproject112/images/images-removebg-preview.jpg' # https://www.kindpng.com/imgv/immwwoR_instructions-button-png-transparent-png/
+    soundComponents(app)
+    imageComponents(app)
 
 def resetGame(app):
     app.background = 'grey'
@@ -85,15 +91,9 @@ def resetGame(app):
     app.instructions = False
 
     app.gameOver = False
-    app.chompSound = Sound('https://eta.vgmtreasurechest.com/soundtracks/pac-man-game-sound-effects/knwtmadt/Chomp.mp3')
-    app.sound = Sound('https://eta.vgmtreasurechest.com/soundtracks/pac-man-game-sound-effects/gmiffyvl/Intro.mp3')  # https://www.myinstants.com/en/instant/pacman-death-44465/
-    app.deathSound = Sound('file:///Users/davidli/termproject112/sounds/pacman-die.mp3')  # https://www.myinstants.com/en/instant/pacman-death-44465/
-    app.poweredUpSound = Sound('file:///Users/davidli/termproject112/sounds/pac-man-power-pellet.mp3') # https://www.myinstants.com/en/instant/pac-man-power-pellet-66997/
-    app.eatingGhostSound = Sound('https://eta.vgmtreasurechest.com/soundtracks/pac-man-game-sound-effects/zaehkcsz/Ghost.mp3')
-    app.gameOverImage = '/Users/davidli/termproject112/images/download.jpeg' # https://www.pond5.com/stock-footage/item/45769390-game-over-spin-down-arcade-end-game-screen-color-motion-grap
-    app.InstructionsImage = '/Users/davidli/termproject112/images/text-1733076606719-removebg-preview.jpg' # Public Pixel Font by GGBotNet
+    soundComponents(app)
+    imageComponents(app)
 
-    app.instructionsButton = '/Users/davidli/termproject112/images/images-removebg-preview.jpg' # https://www.kindpng.com/imgv/immwwoR_instructions-button-png-transparent-png/
 
 
 def redrawAll(app):
@@ -123,9 +123,9 @@ def redrawAll(app):
             app.gamePacman.drawBlinking()
             if app.gamePacman.deathAnimationComplete:
                 drawRect(0, 0, app.width, app.height, fill='black')
-                drawImage(app.gameOverImage, app.width/2, app.height/2, align='center', width=450, height=200)
-                drawLabel(f'Your Score: {app.gamePacman.score}', app.width/2, app.height/2 + 50, size=20, bold=True, align='center', fill = 'white')
-                drawLabel('Press R to Restart', app.width/2, app.height/2 + 100, size=20, bold=True, align='center', fill = 'white')
+                drawImage(app.gameOverImage, app.width/2, app.height/2-50, align='center', width=1000, height=500)
+                drawLabel(f'Your Score: {app.gamePacman.score}', app.width/2, app.height/2 + 50, size=30, bold=True, align='center', fill = 'white', border = 'yellow')
+                drawImage(app.restartImage, app.width/2, app.height/2 + 150, align = 'center', width = 600, height = 45)
         else:
             if app.blinky.returningToBase == False:
                 app.blinky.draw()
@@ -139,6 +139,10 @@ def redrawAll(app):
                 app.pinky.draw()
             else:
                 app.pinky.drawEyes()
+            if app.inky.returningToBase == False:
+                app.inky.draw()
+            else:
+                app.inky.drawEyes()
             app.gamePacman.drawMovement(app.gamePacman.mouthAngle)
     elif app.sandBoxMode == True:
         app.sandBoxMaze.draw()
@@ -177,6 +181,7 @@ def onStep(app):
                     app.deathSound.play()
                 else:
                     app.eatingGhostSound.play()
+                    app.gamePacman.score += 200
                     app.blinky.returningToBase = True
      
             elif distance(app.gamePacman.x, app.gamePacman.y, app.clyde.x, app.clyde.y) < dist and app.clyde.returningToBase == False:
@@ -185,6 +190,7 @@ def onStep(app):
                     app.deathSound.play()
                 else:
                     app.eatingGhostSound.play()
+                    app.gamePacman.score += 200
                     app.clyde.returningToBase = True
             elif distance(app.gamePacman.x, app.gamePacman.y, app.pinky.x, app.pinky.y) < dist and app.pinky.returningToBase == False:
                 if app.gamePacman.poweredUp == False:
@@ -192,7 +198,16 @@ def onStep(app):
                     app.deathSound.play()
                 else:
                     app.eatingGhostSound.play()
+                    app.gamePacman.score += 200
                     app.pinky.returningToBase = True
+            elif distance(app.gamePacman.x, app.gamePacman.y, app.inky.x, app.inky.y) < dist and app.inky.returningToBase == False:
+                if app.gamePacman.poweredUp == False:
+                    app.gameOver = True
+                    app.deathSound.play()
+                else:
+                    app.eatingGhostSound.play()
+                    app.gamePacman.score += 200
+                    app.inky.returningToBase = True
             
             # Updating ghost movement based on their current state
             if app.ghostStill == False:
@@ -230,6 +245,17 @@ def onStep(app):
                     else:
                         app.pinky.turned = False
                         app.pinky.chase(app.gamePacman.x, app.gamePacman.y)
+                
+                if app.inky.returningToBase:
+                    app.inky.returnToBase()
+                elif app.inky.inBase and app.counter > app.inkyLeave:
+                    app.inky.moveOutBase()
+                else:
+                    if app.gamePacman.poweredUp:
+                        app.inky.frighten()
+                    else:
+                        app.inky.turned = False
+                        app.inky.chase(app.gamePacman.x, app.gamePacman.y, app.blinky.x, app.blinky.y)
         else:   
             # Loading screen Pacmans
             app.pacman1.update()
