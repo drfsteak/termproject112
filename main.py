@@ -12,10 +12,15 @@ def distance(x0, y0, x1, y1):
     return ((x0-x1)**2 + (y0-y1)**2)**0.5
 
 def startPacMans(app):
-    app.pacman1 = PacMan(0, app.height/4, 100, 90, True, direction='right')
-    
-    app.pacman2 = PacMan(app.width, 3*app.height/4, 100, 90, True, direction='left')
-    app.gamePacman = PacMan(app.width/2, app.height/2 * 1.5 + 58, 32, 40, True, direction = "right")
+    pacman_x = 100
+    pacman_y = 90
+    app.pacman1 = PacMan(0, app.height/4, pacman_x, pacman_y, True, direction='right')
+    app.pacman2 = PacMan(app.width, 3*app.height/4, pacman_x, pacman_y, True, direction='left')
+
+    pacmanWidth = 32
+    pacmanHeight = 40
+    app.pacManWin = False
+    app.gamePacman = PacMan(app.width/2, app.height/2 * 1.5 + 100, pacmanWidth, pacmanHeight, True, direction = "right")
 
 def resetComponents(app):
     app.drawWall = False
@@ -69,6 +74,9 @@ def imageComponents(app):
     app.pinkyImage = '/Users/davidli/termproject112/images/Screenshot 2024-12-05 at 3.10.56 PM-removebg-preview.jpg' # https://www.pinterest.com/pin/pacman-ghosts-by-seingalad--640496378229925539/
     app.leftSpeechBubble = '/Users/davidli/termproject112/images/download (2)-removebg-preview.jpg' # https://commons.wikimedia.org/wiki/File:Speech_bubble.svg
     app.rightSpeechBubble = '/Users/davidli/termproject112/images/download (3)-removebg-preview (1).jpg' # https://www.vecteezy.com/free-vector/speech-bubble-outline
+    app.winImage = '/Users/davidli/termproject112/images/download (4).jpeg' #https://www.shutterstock.com/video/clip-1023524665-80s-90s-videogame-animated-you-win-screen
+    app.happyPacMan = '/Users/davidli/termproject112/images/download (5)-removebg-preview.jpg' # https://au.pcmag.com/gaming-1/29556/happy-birthday-pac-man?p=1
+
 def onAppStart(app):
     app.background = 'grey'
     app.width = 800
@@ -149,7 +157,11 @@ def redrawAll(app):
             app.gamePacman.drawBlinking()
             if app.gamePacman.deathAnimationComplete:
                 drawRect(0, 0, app.width, app.height, fill='black')
-                drawImage(app.gameOverImage, app.width/2, app.height/2-50, align='center', width=1000, height=500)
+                if app.pacManWin == False:
+                    drawImage(app.gameOverImage, app.width/2, app.height/2-50, align='center', width=1000, height=500)
+                else:
+                    drawImage(app.winImage, app.width/2, app.height/2-50, align='center', width=1000, height=500)
+                    drawImage(app.happyPacMan, app.width/2 + 250, 150, align='center', width=200, height=200)
                 drawLabel(f'Your Score: {app.gamePacman.score}', app.width/2, app.height/2 + 50, size=30, bold=True, align='center', fill = 'white', border = 'yellow')
                 drawImage(app.restartImage, app.width/2, app.height/2 + 150, align = 'center', width = 600, height = 45)
         else:
@@ -193,8 +205,8 @@ def redrawAll(app):
         if app.drawMode:
             drawRect(0, app.height - 50, 100, 45, fill = None, border = 'white', borderWidth = 5)
             drawLabel('Play', 50, app.height - 29, size=30, bold=True, align='center', fill = 'white', border = 'black', borderWidth = 1)
-            for i in range(6):         
-                if (i == 0 and app.drawWall) or (i == 1 and app.drawPacMan) or (i == 2 and app.drawPellet) or (i == 3 and app.drawPowerPellet) or (i == 5 and app.drawEraser):
+            for i in range(5):         
+                if (i == 0 and app.drawWall) or (i == 1 and app.drawPacMan) or (i == 2 and app.drawPellet) or (i == 3 and app.drawPowerPellet) or (i == 4 and app.drawEraser):
                     borderColor = 'blue' 
                 else:
                     borderColor = 'white'
@@ -210,14 +222,9 @@ def redrawAll(app):
                 elif i == 3:  
                     drawCircle(250 + i * 60, app.height - 25, 10, fill='white')
                 elif i == 4:  
-                    drawCircle(250 + i * 60, app.height - 25, 15, fill='red')
-                    drawRect(235 + i * 60, app.height - 25, 30, 15, fill='red')
-                elif i == 5:  
                     drawRect(235 + i * 60, app.height - 40, 30, 30, fill='pink')
-                    drawLine(235 + i * 60, app.height - 40, 
-                            265 + i * 60, app.height - 10, fill='red')
-                    drawLine(265 + i * 60, app.height - 40, 
-                            235 + i * 60, app.height - 10, fill='red')
+                    drawLine(235 + i * 60, app.height - 40, 265 + i * 60, app.height - 10, fill='red')
+                    drawLine(265 + i * 60, app.height - 40, 235 + i * 60, app.height - 10, fill='red')
             if app.drawPopUp:
                 drawImage(app.popUpImage, app.width/2, app.height/2 - 20, align='center', width = 400, height = 200)
                 drawLabel('Cannot erase ghost base!', app.width/2, app.height/2 - 20, size=20, align='center', fill = 'black', font = 'monospace')
@@ -248,10 +255,19 @@ def redrawAll(app):
         drawLabel('Ghosts will turn blue when you can eat them.', app.width/2, 550, align='center', size=20, fill='white')
         drawLabel('Avoid the ghosts! Getting caught ends your game.', app.width/2, 625, align='center', size=20, fill='white')
 
+
+
 def onStep(app):
     if not app.gameOver:
         if app.regularMode or (app.sandBoxMode and app.drawMode == False):
             app.gamePacman.update1()
+            
+            # Check for win condition
+            if not app.maze.checkForPellets():
+                app.gameOver = True
+                app.pacManWin = True
+                app.gamePacman.score += 1000  
+                return
             
             # Checks if PacMan has collided with any ghosts
             dist = (app.gamePacman.radius + app.blinky.radius)/2
@@ -345,6 +361,19 @@ def onStep(app):
 
 
 def onKeyPress(app, key):
+
+    # Keyboard shortcut
+    if key == '/':
+        app.maze.clearPellets()
+        return
+    
+    # Return to main menu
+    if key == 'escape':
+        resetGame(app)
+        app.background = 'grey'
+        app.height = 800
+        return
+        
     # Move PacMan when he is still or moving
     if ((app.sandBoxMode == True and app.drawMode == False)or app.regularMode == True) and key in ['up', 'down', 'right', 'left']:
         app.gamePacman.still = False
@@ -367,7 +396,7 @@ def onKeyPress(app, key):
         elif key == '4' and app.drawMode:
             resetComponents(app)
             app.drawPowerPellet = True
-        elif key == '6' and app.drawMode:
+        elif key == '5' and app.drawMode:
             resetComponents(app)
             app.drawEraser = True
 

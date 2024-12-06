@@ -96,6 +96,19 @@ class Maze:
         if (0 <= row < len(self.grid) and 0 <= col < len(self.grid[0])):    
             self.grid[row][col] = 0
 
+    def checkForPellets(self):
+        for row in self.grid:
+            for cell in row:
+                if cell == 2:  # check for normal pellets
+                    return True
+        return False
+
+    def clearPellets(self):
+        for i in range(len(self.grid)):
+            for j in range(len(self.grid[0])):
+                if self.grid[i][j] == 2:  
+                    self.grid[i][j] = 0   
+
                 
 
 

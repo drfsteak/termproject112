@@ -64,6 +64,7 @@ class Ghost:
         drawCircle(self.x + self.radius/2, eye_y, 
                   eye_radius/2, fill='blue')
     
+    # Ghosts move out of their base until there is a wall in front of them.
     def moveOutBase(self):
         nextY = self.y - self.check
 
@@ -72,7 +73,7 @@ class Ghost:
         else:
             self.inBase = False
             
-
+    # Ghosts return to their base when they are eaten.
     def returnToBase(self):
         x, y = app.maze.getXY(10, 9)
         x += app.maze.cellSize / 2

@@ -14,4 +14,12 @@ Users can install cmu-graphics at the following link: https://academy.cs.cmu.edu
 
 Alternatively, users can use the command `pip install cmu-graphics` to install the library.
 
+## Shortcut Commands
+
+Users can press 'Esc' to return to the main menu at any time
+
+Users can press '/' to fast forward the game to the end.
+
+
+
 
