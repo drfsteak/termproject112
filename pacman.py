@@ -65,6 +65,7 @@ class PacMan:
             self.poweredUp = True
             app.maze.grid[row][col] = 0
 
+    # For updating PacMan when he is moving
     def update1(self):
         if self.still == False:
             if self.poweredUp:
@@ -123,7 +124,7 @@ class PacMan:
             elif self.direction == 'down':
                 nextY += check
 
-            
+            # Check if the next position is a wall, if not, move there
             if not app.maze.checkCollision(nextX, nextY):
                 self.still = False
                 if self.direction == 'right':
@@ -135,6 +136,7 @@ class PacMan:
                 elif self.direction == 'down':
                     self.y += increment
                 
+                # Check if the next position is a pellet or power pellet, if so, collect it
                 row, col = app.maze.getRowCol(self.x, self.y)
                 self.collectPellet(row, col)
                 self.collectPowerPellet(row, col)
@@ -155,7 +157,7 @@ class PacMan:
             else:
                 self.still = True
 
-
+    # For drawing PacMan when he is moving in all directions
     def drawMovement(self, mouthAngle):
         startAngle = int(mouthAngle/2)
         sweepAngle = int(360 - mouthAngle)
@@ -202,20 +204,16 @@ class PacMan:
                 drawArc(cx, self.y, self.radius, self.radius,
                        startAngle + 180, sweepAngle, fill='yellow', border='black')
              
-    
+    # Death animation for PacMan, it blinks by by only drawing when the blinkCount is even
     def drawBlinking(self):
         if not self.deathAnimationComplete:  # During blinking animation
-            if (self.blinkCount // 1) % 2 == 0:
+            if (self.blinkCount) % 2 == 0:
                 startAngle = int(self.mouthAngle/2)
                 sweepAngle = int(360 - self.mouthAngle)
                 drawArc(self.x, self.y, self.radius, self.radius,
                        startAngle, sweepAngle, fill='yellow', border='black')
-        else:  # After blinking is complete
-            startAngle = int(self.mouthAngle/2)
-            sweepAngle = int(360 - self.mouthAngle)
-            drawArc(self.x, self.y, self.radius, self.radius,
-                   startAngle, sweepAngle, fill='yellow', border='black')
-
+       
+    # Update the death animation
     def updateDeath(self):
         if not self.deathAnimationComplete:
             self.blinkTimer += 1

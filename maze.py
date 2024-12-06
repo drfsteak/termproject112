@@ -69,7 +69,7 @@ class Maze:
         
         return self.grid[row][col] == 1  or self.grid[row][col] == 4
     
-    
+    # For checking walls only
     def checkCollision2(self, nextX, nextY):
         row, col = self.getRowCol(nextX, nextY)
         
@@ -81,16 +81,20 @@ class Maze:
 
     def drawWall(self, row, col):
     
-        if (0 <= row < len(self.grid) and 0 <= col < len(self.grid[0])):    
+        if (self.grid[row][col] == 0 and 0 <= row < len(self.grid) and 0 <= col < len(self.grid[0])):    
             self.grid[row][col] = 1
     
     def drawPellet(self, row, col):
-        if (0 <= row < len(self.grid) and 0 <= col < len(self.grid[0])):    
+        if (self.grid[row][col] == 0 and 0 <= row < len(self.grid) and 0 <= col < len(self.grid[0])):    
             self.grid[row][col] = 2
     
     def drawPowerPellet(self, row, col):
-        if (0 <= row < len(self.grid) and 0 <= col < len(self.grid[0])):    
+        if (self.grid[row][col] == 0 and 0 <= row < len(self.grid) and 0 <= col < len(self.grid[0])):    
             self.grid[row][col] = 3
+    
+    def drawEraser(self, row, col):
+        if (0 <= row < len(self.grid) and 0 <= col < len(self.grid[0])):    
+            self.grid[row][col] = 0
 
                 
 

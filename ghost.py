@@ -64,9 +64,6 @@ class Ghost:
         drawCircle(self.x + self.radius/2, eye_y, 
                   eye_radius/2, fill='blue')
     
-    def scatter(self, dx, dy):
-        pass
-    
     def moveOutBase(self):
         nextY = self.y - self.check
 
@@ -99,10 +96,10 @@ class Ghost:
    
 
     # Frightened algorithm from this video: https://www.youtube.com/watch?v=ataGotQ7ir8&t=227s
-    # All the code is implemented by me, I did not view any external code for this function other than what was given in the chase function.
+    # All the code is implemented by me, I did not view any external code for this function other than what was given in the chase function for Blinky.
     def frighten(self):
 
-     
+        # Ghosts move in a random direction when frightened, check all the possible moves and choose a random one.
         
         valid_moves = []
         opposite_moves = {
@@ -182,7 +179,7 @@ class Pinky(Ghost):
     
 
     # https://www.youtube.com/watch?v=ataGotQ7ir8&t=423s Chase Algorithms for Different Ghosts
-    # I watched the video to understand how the Ghost algorithm worked, but I implemented all the code myself
+    # I watched the video to understand how the Ghost algorithm worked, but I implemented most of the code myself aside from what was labeled in Blinky's chase
 
     # Pinky targets 4 spaces in front of PacMan, and has a special case when PacMan is facing up.
     def chase(self, pacman_x, pacman_y):
@@ -218,6 +215,7 @@ class Pinky(Ghost):
         best_direction = None
         min_distance = float('inf')
 
+        # Check all the possible moves and choose the one that is closest to the targetRow and targetCol
         for direction, (nextX, nextY) in possible_moves.items():
             if self.prev_direction and direction == opposite_moves[self.prev_direction]:
                 continue
@@ -266,7 +264,7 @@ class Blinky(Ghost):
         targetRow, targetCol = app.maze.getRowCol(pacman_x, pacman_y)
        
       
-     
+        # Check all the possible moves and choose the one that is closest to the targetRow and targetCol
         possible_moves = {
             'up': (self.x, self.y - self.check),
             'down': (self.x, self.y + self.check),
@@ -324,8 +322,10 @@ class Inky(Ghost):
         super().__init__(x, y, radius, 'cyan')
     
     # Chase algorithm from this video: https://www.youtube.com/watch?v=ataGotQ7ir8&t=227s
-    # All the code is implemented by me, I did not view any external code for this function other than what was given in the chase function.
+    # All the code is implemented by me, I did not view any external code for this function other than what was labeled in the chase function from Blinky.
     def chase(self, pacman_x, pacman_y, blinky_x, blinky_y):
+
+        # Uses Pacman's position and Blinky's position to calculate the targetRow and targetCol
         pacmanRow, pacmanCol = app.maze.getRowCol(pacman_x, pacman_y)
 
         if app.gamePacman.direction == 'up':
@@ -369,6 +369,7 @@ class Inky(Ghost):
         best_direction = None
         min_distance = float('inf')
 
+        # Check all the possible moves and choose the one that is closest to the targetRow and targetCol
         for direction, (nextX, nextY) in possible_moves.items():
             if self.prev_direction and direction == opposite_moves[self.prev_direction]:
                 continue
@@ -413,7 +414,7 @@ class Clyde(Ghost):
     # I watched the video to understand how the Ghost algorithm worked, but I implemented all the code myself aside from what was mentioned in Blinky's chase.
     def chase(self):
        
- 
+        # Check all the possible moves and choose a random one
         valid_moves = []
         opposite_moves = {
             'up': 'down',
